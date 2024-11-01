@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container my-5">
+    <div class="header text-center mb-4">
+        <img src="images/task.jpg" class="img-fluid" alt="Header Image">
+        <h1 class="overlay-text">Task Management for Self-Studies</h1>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Your Tasks</h2>
+        <a th:href="@{/add_task}" class="btn btn-primary">Add Task</a>
+    </div>
+
+    <table class="table table-hover mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Task Name</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.name}">Task Name</td>
+            <td th:text="${task.deadline}">Deadline</td>
+            <td th:text="${task.status}">Status</td>
+            <td>
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:href="@{/edit_task/{id}(id=${task.id})}" class="btn btn-sm btn-warning">Edit</a>
+                    <form th:action="@{/delete_task/{id}(id=${task.id})}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="delete"/> <!-- Indicate delete method -->
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        <!-- If no tasks are available -->
+        <tr th:if="${#lists.isEmpty(tasks)}">
+            <td colspan="4" class="text-center">No tasks available</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
